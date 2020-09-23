@@ -8,7 +8,6 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  * Guarantees: immutable; is always valid
  */
 public class Remark {
-
     public static final String MESSAGE_CONSTRAINTS = "Remarks can take any values, and it should not be blank";
 
     public final String value;
