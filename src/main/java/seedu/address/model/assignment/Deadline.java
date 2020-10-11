@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
 import java.time.DateTimeException;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
@@ -42,6 +43,27 @@ public class Deadline {
         } catch (DateTimeException e) {
             return false;
         }
+    }
+
+    public String getLessonDateFromDay(String lessonDay) {
+        String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+        LocalDateTime currentDate = LocalDateTime.now();
+        DayOfWeek dayOfTheWeek = currentDate.getDayOfWeek();
+
+        int dayIndex = 0;
+        for (int i = 0; i < 7; i++) {
+            String day = days[i];
+            if (day.equals(lessonDay)) {
+                dayIndex = i + 1;
+                break;
+            }
+        }
+
+        // assuming we are always going to count future lessons (omit lessons that have already passed)
+        int numOfDaysLessonIsAheadOfCurrentDate = Math.abs(dayIndex - dayOfTheWeek.getValue());
+        LocalDateTime lessonDate = currentDate.plusDays(numOfDaysLessonIsAheadOfCurrentDate);
+
+        return lessonDate.format(DateTimeFormatter.ofPattern(DEADLINE_DATE_TIME_FORMAT));
     }
 
     @Override

@@ -52,4 +52,13 @@ public class DeadlineTest {
         assertTrue(Deadline.isValidDeadline("30-04-2020 1800")); // exactly of format "dd-MM-uuuu HHmm"
         assertTrue(Deadline.isValidDeadline("31-12-2020 2359"));
     }
+
+    @Test
+    public void getLessonDateFromDay() {
+        String expectedLessonDay = "Tuesday";
+        Deadline dd = new Deadline("01-01-2000 1800");
+        String actualLessonDay = dd.getLessonDateFromDay(expectedLessonDay);
+        System.out.println(actualLessonDay);
+        assertTrue(expectedLessonDay == actualLessonDay);
+    }
 }
