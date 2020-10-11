@@ -30,6 +30,7 @@ public class CommandTestUtil {
     public static final String VALID_DEADLINE_LAB = "02-02-2020 2000";
     public static final String VALID_MODULE_CODE_HW = "CS2103T";
     public static final String VALID_MODULE_CODE_LAB = "CS2100";
+    public static final String VALID_REMIND = "remind";
 
     public static final String NAME_DESC_HW = " " + PREFIX_NAME + VALID_NAME_HW;
     public static final String NAME_DESC_LAB = " " + PREFIX_NAME + VALID_NAME_LAB;
@@ -42,6 +43,8 @@ public class CommandTestUtil {
             + "31-02-2020 0000"; // 31st Feb does not exist
     public static final String INVALID_MODULE_CODE_DESC = " "
             + PREFIX_MODULE_CODE; // empty string not allowed for module code
+    public static final String REMIND_DESC = " " + VALID_REMIND;
+    public static final String INVALID_REMIND = " " + "remin"; // wrong spelling
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";
     public static final String PREAMBLE_NON_EMPTY = "NonEmptyPreamble";
 

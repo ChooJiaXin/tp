@@ -42,8 +42,8 @@ public class AssignmentCard extends UiPart<Region> {
         this.assignment = assignment;
         id.setText(displayedIndex + ". ");
         name.setText(assignment.getName().fullName);
-        deadline.setText(assignment.getDeadline().value);
-        moduleCode.setText(assignment.getModuleCode().moduleCode);
+        deadline.setText("Deadline: " + assignment.getDeadline().value);
+        moduleCode.setText("Module: " + assignment.getModuleCode().moduleCode);
     }
 
     @Override

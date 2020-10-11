@@ -49,6 +49,8 @@ public class TypicalAssignments {
             .withModuleCode(VALID_MODULE_CODE_HW).build();
     public static final Assignment LAB = new AssignmentBuilder().withName(VALID_NAME_LAB)
             .withDeadline(VALID_DEADLINE_LAB).withModuleCode(VALID_MODULE_CODE_LAB).build();
+    public static final Assignment LAB_REMIND = new AssignmentBuilder().withName(VALID_NAME_LAB)
+            .withDeadline(VALID_DEADLINE_LAB).withModuleCode(VALID_MODULE_CODE_LAB).withRemindersSet().build();
 
     private TypicalAssignments() {} // prevents instantiation
 

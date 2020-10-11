@@ -7,17 +7,20 @@ import static seedu.address.logic.commands.CommandTestUtil.DESC_HW;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_DEADLINE_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_MODULE_CODE_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_REMIND;
 import static seedu.address.logic.commands.CommandTestUtil.MODULE_CODE_DESC_HW;
 import static seedu.address.logic.commands.CommandTestUtil.MODULE_CODE_DESC_LAB;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_HW;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_LAB;
 import static seedu.address.logic.commands.CommandTestUtil.PREAMBLE_NON_EMPTY;
 import static seedu.address.logic.commands.CommandTestUtil.PREAMBLE_WHITESPACE;
+import static seedu.address.logic.commands.CommandTestUtil.REMIND_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_DEADLINE_LAB;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.address.testutil.TypicalAssignments.HW;
 import static seedu.address.testutil.TypicalAssignments.LAB;
+import static seedu.address.testutil.TypicalAssignments.LAB_REMIND;
 
 import org.junit.jupiter.api.Test;
 
@@ -35,6 +38,7 @@ public class AddCommandParserTest {
     @Test
     public void parse_allFieldsPresent_success() {
         Assignment expectedAssignment = new AssignmentBuilder(LAB).build();
+        Assignment expectedAssignmentWithRemind = new AssignmentBuilder(LAB_REMIND).build();
 
         // whitespace only preamble
         assertParseSuccess(parser, PREAMBLE_WHITESPACE + NAME_DESC_LAB + DEADLINE_DESC_LAB
@@ -44,18 +48,34 @@ public class AddCommandParserTest {
         assertParseSuccess(parser, NAME_DESC_HW + NAME_DESC_LAB + DEADLINE_DESC_LAB
                 + MODULE_CODE_DESC_LAB, new AddCommand(expectedAssignment));
 
+        // multiple names with remind - last name accepted
+        assertParseSuccess(parser, NAME_DESC_HW + NAME_DESC_LAB + DEADLINE_DESC_LAB
+                + MODULE_CODE_DESC_LAB + REMIND_DESC, new AddCommand(expectedAssignmentWithRemind));
+
         // multiple deadlines - last deadline accepted
         assertParseSuccess(parser, NAME_DESC_LAB + DEADLINE_DESC_HW + DEADLINE_DESC_LAB + MODULE_CODE_DESC_LAB,
                 new AddCommand(expectedAssignment));
 
+        // multiple deadlines with remind - last deadline accepted
+        assertParseSuccess(parser, NAME_DESC_LAB + DEADLINE_DESC_HW + DEADLINE_DESC_LAB + MODULE_CODE_DESC_LAB
+                + REMIND_DESC, new AddCommand(expectedAssignmentWithRemind));
+
         // multiple module codes - last module code accepted
-        assertParseSuccess(parser, NAME_DESC_LAB + DEADLINE_DESC_LAB + MODULE_CODE_DESC_LAB,
-                new AddCommand(expectedAssignment));
+        assertParseSuccess(parser, NAME_DESC_LAB + DEADLINE_DESC_LAB + MODULE_CODE_DESC_HW
+                + MODULE_CODE_DESC_LAB, new AddCommand(expectedAssignment));
+
+        // multiple module codes with remind - last module code accepted
+        assertParseSuccess(parser, NAME_DESC_LAB + DEADLINE_DESC_LAB + MODULE_CODE_DESC_HW
+                + MODULE_CODE_DESC_LAB + REMIND_DESC, new AddCommand(expectedAssignmentWithRemind));
+
+        // all fields with remind
+        assertParseSuccess(parser, NAME_DESC_LAB + DEADLINE_DESC_LAB + MODULE_CODE_DESC_LAB + REMIND_DESC,
+                new AddCommand(expectedAssignmentWithRemind));
     }
 
     @Test
     public void parse_optionalFieldsMissing_success() {
-        // zero tags
+        // no remind
         Assignment expectedAssignment = new AssignmentBuilder(HW).build();
         assertParseSuccess(parser, NAME_DESC_HW + DEADLINE_DESC_HW + MODULE_CODE_DESC_HW,
                 new AddCommand(expectedAssignment));
@@ -99,6 +119,11 @@ public class AddCommandParserTest {
         // two invalid values, only first invalid value reported
         assertParseFailure(parser, INVALID_NAME_DESC + DEADLINE_DESC_LAB + INVALID_MODULE_CODE_DESC,
                 Name.MESSAGE_CONSTRAINTS);
+
+        // invalid remind
+        assertParseFailure(parser, NAME_DESC_HW + NAME_DESC_LAB + DEADLINE_DESC_LAB
+                + MODULE_CODE_DESC_LAB + INVALID_REMIND, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                AddCommand.MESSAGE_USAGE));
 
         // non-empty preamble
         assertParseFailure(parser, PREAMBLE_NON_EMPTY + NAME_DESC_LAB + DEADLINE_DESC_LAB

@@ -10,12 +10,19 @@ import seedu.address.model.assignment.Name;
 import seedu.address.model.assignment.Task;
 
 public class Lesson extends Task {
+    private final Deadline endTime;
+
     /**
      * Every field must be present and not null.
      */
-    public Lesson(Name name, Deadline deadline, ModuleCode moduleCode) {
+    public Lesson(Name name, Deadline deadline, Deadline endTime, ModuleCode moduleCode) {
         super(name, deadline, moduleCode);
-        requireAllNonNull(name, deadline, moduleCode);
+        this.endTime = endTime;
+        requireAllNonNull(name, deadline, endTime, moduleCode);
+    }
+
+    public Deadline getEndTime() {
+        return this.endTime;
     }
 
     /**
@@ -28,7 +35,8 @@ public class Lesson extends Task {
 
         return otherLesson != null
                 && otherLesson.getName().equals(getName())
-                && (otherLesson.getTime().equals(getTime()));
+                && otherLesson.getTime().equals(getTime())
+                && otherLesson.getEndTime().equals(getEndTime());
     }
 
     /**
@@ -48,13 +56,14 @@ public class Lesson extends Task {
         Lesson otherLesson = (Lesson) other;
         return otherLesson.getName().equals(getName())
                 && otherLesson.getTime().equals(getTime())
+                && otherLesson.getEndTime().equals(getEndTime())
                 && otherLesson.getModuleCode().equals(getModuleCode());
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(super.getName(), getTime(), super.getModuleCode());
+        return Objects.hash(super.getName(), super.getTime(), getEndTime(), super.getModuleCode());
     }
 
     @Override
@@ -63,6 +72,8 @@ public class Lesson extends Task {
         builder.append(getName())
                 .append(" Time: ")
                 .append(getTime())
+                .append(" End Time: ")
+                .append(getEndTime())
                 .append(" Module: ")
                 .append(getModuleCode());
         return builder.toString();

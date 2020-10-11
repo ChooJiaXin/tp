@@ -12,10 +12,12 @@ public class LessonBuilder {
 
     public static final String DEFAULT_NAME = "CS2103T Lecture";
     public static final String DEFAULT_TIME = "01-01-2020 1200";
+    public static final String DEFAULT_END_TIME = "01-01-2020 1400";
     public static final String DEFAULT_MODULE_CODE = "CS2103T";
 
     private Name name;
     private Deadline time;
+    private Deadline endTime;
     private ModuleCode moduleCode;
 
     /**
@@ -24,6 +26,7 @@ public class LessonBuilder {
     public LessonBuilder() {
         name = new Name(DEFAULT_NAME);
         time = new Deadline(DEFAULT_TIME);
+        endTime = new Deadline(DEFAULT_END_TIME);
         moduleCode = new ModuleCode(DEFAULT_MODULE_CODE);
     }
 
@@ -33,6 +36,7 @@ public class LessonBuilder {
     public LessonBuilder(Lesson lessonToCopy) {
         name = lessonToCopy.getName();
         time = lessonToCopy.getTime();
+        endTime = lessonToCopy.getEndTime();
         moduleCode = lessonToCopy.getModuleCode();
     }
 
@@ -53,6 +57,14 @@ public class LessonBuilder {
     }
 
     /**
+     * Sets the {@code endTime} of the {@code Lesson} that we are building.
+     */
+    public LessonBuilder withEndTime(String endTime) {
+        this.endTime = new Deadline(endTime);
+        return this;
+    }
+
+    /**
      * Sets the {@code ModuleCode} of the {@code Lesson} that we are building.
      */
     public LessonBuilder withModuleCode(String moduleCode) {
@@ -61,6 +73,6 @@ public class LessonBuilder {
     }
 
     public Lesson build() {
-        return new Lesson(name, time, moduleCode);
+        return new Lesson(name, time, endTime, moduleCode);
     }
 }

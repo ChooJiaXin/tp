@@ -2,11 +2,18 @@ package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
 
+import java.io.IOException;
 import java.util.List;
+
+import org.json.simple.parser.ParseException;
 
 import javafx.collections.ObservableList;
 import seedu.address.model.assignment.Assignment;
 import seedu.address.model.assignment.UniqueAssignmentList;
+import seedu.address.model.lesson.Lesson;
+import seedu.address.model.lesson.UniqueLessonList;
+import seedu.address.timetable.TimetableData;
+import seedu.address.timetable.TimetableRetriever;
 
 /**
  * Wraps all data at the address-book level
@@ -15,6 +22,7 @@ import seedu.address.model.assignment.UniqueAssignmentList;
 public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniqueAssignmentList assignments;
+    private final UniqueLessonList lessons;
 
     /*
      * The 'unusual' code block below is a non-static initialization block, sometimes used to avoid duplication
@@ -25,6 +33,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     {
         assignments = new UniqueAssignmentList();
+        lessons = new UniqueLessonList();
     }
 
     public AddressBook() {}
@@ -48,12 +57,21 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
+     * Replaces the contents of the lesson list with {@code lessons}.
+     * {@code lessons} must not contain duplicate lessons.
+     */
+    public void setLessons(List<Lesson> lessons) {
+        this.lessons.setLessons(lessons);
+    }
+
+    /**
      * Resets the existing data of this {@code AddressBook} with {@code newData}.
      */
     public void resetData(ReadOnlyAddressBook newData) {
         requireNonNull(newData);
 
         setAssignments(newData.getAssignmentList());
+        setLessons(newData.getLessonList());
     }
 
     //// assignment-level operations
@@ -94,12 +112,44 @@ public class AddressBook implements ReadOnlyAddressBook {
         assignments.remove(key);
     }
 
+    //// lesson-level operations
+
+    /**
+     * Imports and adds lessons based on NUSMods timetable data.
+     */
+    public void importTimetable(TimetableData data) {
+        try {
+            clearLessons();
+            List<Lesson> lessons = TimetableRetriever.retrieveLessons(data);
+            for (Lesson lesson : lessons) {
+                addLesson(lesson);
+            }
+        } catch (IOException | ParseException e) {
+            // nothing happens for now.
+        }
+    }
+
+    /**
+     * Adds a lesson to the address book.
+     * The lesson must not already exist in the address book.
+     */
+    public void addLesson(Lesson lesson) {
+        lessons.add(lesson);
+    }
+
+    /**
+     * Clears all lessons in address book.
+     */
+    public void clearLessons() {
+        lessons.removeAll();
+    }
+
     //// util methods
 
     @Override
     public String toString() {
         return assignments.asUnmodifiableObservableList().size() + " assignments";
-        // TODO: refine later
+        // TODO: refine later (add lessons?)
     }
 
     @Override
@@ -108,14 +158,21 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     @Override
+    public ObservableList<Lesson> getLessonList() {
+        return lessons.asUnmodifiableObservableList();
+    }
+
+    @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof AddressBook // instanceof handles nulls
-                && assignments.equals(((AddressBook) other).assignments));
+                && assignments.equals(((AddressBook) other).assignments))
+                && lessons.equals(((AddressBook) other).lessons);
     }
 
     @Override
     public int hashCode() {
-        return assignments.hashCode();
+        // multiply sum of fields with prime number 31
+        return 31 * (assignments.hashCode() + lessons.hashCode());
     }
 }

@@ -12,6 +12,8 @@ import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.assignment.Assignment;
+import seedu.address.model.lesson.Lesson;
+import seedu.address.timetable.TimetableData;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -23,6 +25,7 @@ public class ModelManager implements Model {
     private final UserPrefs userPrefs;
     private final FilteredList<Assignment> filteredAssignments;
     private final FilteredList<Assignment> remindedAssignments;
+    private final FilteredList<Lesson> lessons;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -38,6 +41,7 @@ public class ModelManager implements Model {
         filteredAssignments = new FilteredList<>(this.addressBook.getAssignmentList());
         remindedAssignments = new FilteredList<>(
                 this.addressBook.getAssignmentList(), PREDICATE_SHOW_ALL_REMINDED_ASSIGNMENTS);
+        lessons = new FilteredList<>(this.addressBook.getLessonList());
     }
 
     public ModelManager() {
@@ -92,6 +96,11 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void importTimetable(TimetableData data) {
+        addressBook.importTimetable(data);
+    }
+
+    @Override
     public boolean hasAssignment(Assignment assignment) {
         requireNonNull(assignment);
         return addressBook.hasAssignment(assignment);
@@ -141,6 +150,11 @@ public class ModelManager implements Model {
     @Override
     public ObservableList<Assignment> getRemindedAssignmentsList() {
         return remindedAssignments;
+    }
+
+    @Override
+    public ObservableList<Lesson> getLessonList() {
+        return lessons;
     }
 
     @Override

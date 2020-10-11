@@ -6,6 +6,8 @@ import java.util.function.Predicate;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.assignment.Assignment;
+import seedu.address.model.lesson.Lesson;
+import seedu.address.timetable.TimetableData;
 
 /**
  * The API of the Model component.
@@ -54,6 +56,11 @@ public interface Model {
     ReadOnlyAddressBook getAddressBook();
 
     /**
+     * Adds lessons based on NUSMods Timetable data.
+     */
+    void importTimetable(TimetableData data);
+
+    /**
      * Returns true if an assignment with the same identity as {@code assignment} exists in the address book.
      */
     boolean hasAssignment(Assignment assignment);
@@ -89,4 +96,7 @@ public interface Model {
 
     /** Returns an unmodifiable view of the reminded assignments list */
     ObservableList<Assignment> getRemindedAssignmentsList();
+
+    /** Returns an unmodifiable view of lesson list */
+    ObservableList<Lesson> getLessonList();
 }

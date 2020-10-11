@@ -59,7 +59,14 @@ public class UniqueLessonList implements Iterable<Lesson> {
         }
     }
 
-    public void setPersons(UniqueLessonList replacement) {
+    /**
+     * Removes all lessons from the list.
+     */
+    public void removeAll() {
+        internalList.removeAll();
+    }
+
+    public void setLessons(UniqueLessonList replacement) {
         requireNonNull(replacement);
         internalList.setAll(replacement.internalList);
     }
@@ -68,7 +75,7 @@ public class UniqueLessonList implements Iterable<Lesson> {
      * Replaces the contents of this list with {@code lessons}.
      * {@code lessons} must not contain duplicate lessons.
      */
-    public void setPersons(List<Lesson> lessons) {
+    public void setLessons(List<Lesson> lessons) {
         requireAllNonNull(lessons);
         if (!lessonsAreUnique(lessons)) {
             throw new DuplicateLessonException();

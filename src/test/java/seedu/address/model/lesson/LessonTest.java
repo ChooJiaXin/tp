@@ -3,6 +3,7 @@ package seedu.address.model.lesson;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.TypicalLessons.LECTURE;
+import static seedu.address.testutil.TypicalLessons.VALID_END_TIME;
 import static seedu.address.testutil.TypicalLessons.VALID_MODULE_CODE;
 import static seedu.address.testutil.TypicalLessons.VALID_NAME;
 import static seedu.address.testutil.TypicalLessons.VALID_TIME;
@@ -28,6 +29,10 @@ public class LessonTest {
 
         // different name -> returns false
         editedLecture = new LessonBuilder(LECTURE).withName(VALID_NAME).build();
+        assertFalse(LECTURE.isSameLesson(editedLecture));
+
+        // different endTime -> returns false
+        editedLecture = new LessonBuilder(LECTURE).withEndTime(VALID_END_TIME).build();
         assertFalse(LECTURE.isSameLesson(editedLecture));
     }
 }
